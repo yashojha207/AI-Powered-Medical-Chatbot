@@ -19,7 +19,7 @@ conda activate medicalchatbot
 ```
 
 
-### STEP 2 - install the requirements
+### STEP 2 - Install the requirements
 ```bash
 pip install -r requirements.txt
 ```
