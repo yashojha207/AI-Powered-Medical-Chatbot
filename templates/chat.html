@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Powered Medical Chatbot</title>
+  <link rel="stylesheet" href="../static/style.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+  <div class="chat-container">
+    <div class="chat-header">
+      <h2>AI-Powered Medical Chatbot</h2>
+    </div>
+    <div class="chat-body" id="chatBody">
+      <div class="message bot">Hello! How can I help you today?</div>
+    </div>
+    <div class="chat-footer">
+      <input type="text" id="userInput" placeholder="Type your message..." autocomplete="off">
+      <button id="sendBtn">Send</button>
+    </div>
+  </div>
+
+  <script>
+    function addMessage(sender, text) {
+      const msgClass = sender === "user" ? "user" : "bot";
+      $("#chatBody").append(`<div class="message ${msgClass}">${text}</div>`);
+      $("#chatBody").scrollTop($("#chatBody")[0].scrollHeight); // auto-scroll
+    }
+
+    $("#sendBtn").on("click", function() {
+  let msg = $("#userInput").val().trim();
+  if (msg) {
+    addMessage("user", msg);
+    $("#userInput").val("");
+
+    $.ajax({
+      url: "/get",
+      method: "POST",
+      data: { msg: msg },   // 🔹 send as form data (key = "msg")
+      success: function(response) {
+        addMessage("bot", response);
+      }
+    });
+  }
+});
+
+
+    $("#userInput").on("keypress", function(e) {
+      if (e.which === 13) { // Enter key
+        $("#sendBtn").click();
+      }
+    });
+  </script>
+</body>
+</html>
